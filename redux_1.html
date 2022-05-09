@@ -1,0 +1,74 @@
+<html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.2.0/redux.js"></script>
+
+<body>
+    <div id="anchor"></div>
+    <div id="anchor2"></div>
+</body>
+
+<script>
+
+    let store = null
+
+    const incrementReducer = (s, a) =>
+        a.type === 'increment' ? { ...s, iterator: s.iterator + 1 } :
+            a.type === 'decrement' ? { ...s, iterator: s.iterator - 1 } :
+                a.type === 'reset' ? { ...s, iterator: 0 } : s;
+
+
+    const incrementReducer2 = (s, a) =>
+        a.type === 'increment2' ? { ...s, iterator2: s.iterator2 + 1 } :
+            a.type === 'decrement2' ? { ...s, iterator2: s.iterator2 - 1 } :
+                a.type === 'reset' ? { ...s, iterator2: 0 } : s;
+
+
+
+
+    const createStore = () => Redux.createStore(
+        (state, action) => ({
+            ...incrementReducer2(incrementReducer(state, action), action),
+        }),
+        { iterator: 0, iterator2: 0 }
+    )
+
+    // Action creators
+    const increment = () => ({ type: 'increment' })
+    const decrement = () => ({ type: 'decrement' })
+    const reset = () => ({ type: 'reset' })
+
+    const increment2 = () => ({ type: 'increment2' })
+    const decrement2 = () => ({ type: 'decrement2' })
+
+
+    // UI =================================================
+    const iterator = (dispatch, anchorId, count, inc, dec, res) => {
+        const anchor = document.getElementById(anchorId);
+        const [bI, bD, b0] = [document.createElement('BUTTON'), document.createElement('BUTTON'), document.createElement('BUTTON'),];
+        bI.onclick = () => dispatch(inc()); bI.innerHTML = '+';
+        bD.onclick = () => dispatch(dec()); bD.innerHTML = '-';
+        b0.onclick = () => dispatch(res()); b0.innerHTML = 'Reset';
+
+
+        if (anchor) {
+            anchor.innerHTML = `
+                <h3> Iteration count ${count} </h3>
+                `
+            anchor.append(bI, bD, b0);
+
+        }
+    }
+    // =================================== ui
+
+
+    function app() {
+        store = createStore();
+        store.subscribe(state => iterator(store.dispatch, 'anchor', store.getState().iterator, increment, decrement, reset))
+        store.subscribe(state => iterator(store.dispatch, 'anchor2', store.getState().iterator2, increment2, decrement2, reset))
+        store.dispatch({ type: '__INIT____ACTION' });
+    }
+
+    app();
+
+</script>
+
+</html>
