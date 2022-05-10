@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Redux basic example</title>
+    <script src="https://unpkg.com/redux@latest/dist/redux.min.js"></script>
+  </head>
+  <body>
+
+    <div id="container">
+        <p>
+            <button id="increment">+</button>
+            <span id="valueOfCounter">0</span>
+            <button id="decrement">-</button>
+        </p>
+        <p>                                             <!-- html kod-->
+            <input type="number" id="value">
+            <button id="addAmount">Add Amount</button>
+            <button id="AddSync">AddSync</button>
+        </p>
+    </div>
+
+    <script>
+        const INCREMENT = 'INCREMENT';
+        const DECREMENT = 'DECREMENT';
+        const ADD_AMOUNT = 'ADD_AMOUNT';
+        const ADD_SYNC = 'ADD_SYNC';
+        
+        //definisanje akcija
+        function increment(){
+            return{
+                type: INCREMENT
+        }}
+        function decrement() {
+           return{
+            type: DECREMENT
+           } 
+        }
+       function addAmount(payload){
+            return{
+            type: ADD_AMOUNT,
+            payload
+               }
+            }
+       
+        function AddSync(payload){
+          return {
+            type: ADD_SYNC,
+            payload
+
+          } 
+            
+       }
+        //reducer
+        function counterReducer(state =0, action){
+            switch(action.type){
+                case INCREMENT: {
+                    return state +1 ;
+                }
+                case DECREMENT: {
+                    return state -1;
+                }
+             case ADD_AMOUNT: {
+                    return state + action.payload
+              }
+               case ADD_SYNC: {
+                    return state + action.payload
+               }
+                default :return state;
+                }
+            }
+
+        const store = Redux.createStore(counterReducer); //pravljenje stora
+        
+        let valuEl = document.getElementById('valueOfCounter');
+        let vrednostInputa = document.getElementById('value'); 
+            
+            function render(){
+                valuEl.innerHTML = store.getState();
+              }
+
+            render()
+            store.subscribe(render); //subscribe
+           
+            document.getElementById('increment').addEventListener('click', function(){
+                 store.dispatch(increment())  //dispatch akcija klikom na dugme
+                });
+
+            document.getElementById('decrement').addEventListener('click', function(){
+                store.dispatch(decrement())     
+            });
+
+            document.getElementById('addAmount').addEventListener('click',function(){
+                store.dispatch(addAmount(+vrednostInputa.value))  
+            })
+            document.getElementById('AddSync').addEventListener('click', function () {
+                setTimeout(function () {
+                    store.dispatch(AddSync(+vrednostInputa.value))
+                        }, 1000)
+        })
