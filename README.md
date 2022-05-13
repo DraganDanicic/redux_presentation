@@ -30,6 +30,7 @@ Workshop presentations, code as you speak. Make them inspired with awe.
     2) [Redux-data-flow-paint](https://www.autodraw.com/share/SE4I2LPS2LME) 
     2) [Redux one-way dataflow](https://d33wubrfki0l68.cloudfront.net/73bb62ebc338fcd64ee95bde18684ffe3b3bb379/dac4f/assets/images/one-way-data-flow-04fe46332c1ccb3497ecb04b94e55b97.png)
     3) [Redux async dataflow](https://redux.js.org/assets/images/ReduxAsyncDataFlowDiagram-d97ff38a0f4da0f327163170ccc13e80.gif)
+    4) [Middleware dataflow](https://miro.medium.com/max/1400/1*LXvfJLM7DzJ8uxxC5xRDYg.png)
 
 ## Terms
 * state
