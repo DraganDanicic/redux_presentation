@@ -2,124 +2,127 @@
 <html>
 
 <head>
-    <title>Redux prezentacija</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.2.0/redux.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/redux-thunk/2.4.1/redux-thunk.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/redux-logger/4.0.0/redux-logger.js"></script>
+  <title>Redux prezentacija</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.2.0/redux.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/redux-thunk/2.4.1/redux-thunk.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/redux-logger/4.0.0/redux-logger.js"></script>
 
 
 </head>
 
 <body>
-    <div id="container">
-      
-        
-    </div>
-    <button id="fetch">Fetch Users</button>
+  <div id="container">
 
-    <script>
+
+  </div>
+  <button id="fetch">Fetch Users</button>
+
+  <script>
     const container = document.getElementById('container');
     const button = document.getElementById('fetch');
     const applyMiddleware = Redux.applyMiddleware;
-//initial state
-const intitialState = {
-    loading: false,
-    users : [],
-    error : ''
-}
+    //initial state
+    const intitialState = {
+      loading: false,
+      users: [],
+      error: ''
+    }
     //action 
     const FETCH_USERS_REQUEST = 'FETCH_USERS_REQUEST'
     const FETCH_USERS_SUCCES = 'FETC_USERS_SUCCES'
     const FETCH_USERS_FALIURE = 'FETC_USERS_FALIURE'
 
     // ACTION CREATOR ////////////
-       
-    function fetchUsersRequest(){
-    return {
+
+    function fetchUsersRequest() {
+      return {
         type: FETCH_USERS_REQUEST
+      }
     }
-}
-    function fetchUsersSucces(users){
-    return {
+    function fetchUsersSucces(users) {
+      return {
         type: FETCH_USERS_SUCCES,
         payload: users
+      }
     }
-}
-    function fetchUsersFaliure(error){
-    return {
+    function fetchUsersFaliure(error) {
+      return {
         type: FETCH_USERS_FALIURE,
         payload: error
+      }
     }
-}
-  // REDUCER
-  function reducer(state = intitialState, action) {
-    
-    switch(action.type){
-        case FETCH_USERS_REQUEST : {
-            return {
-                loading: true,
-                users: [],
-                error: ''
-            }
+    // REDUCER
+    function reducer(state = intitialState, action) {
+
+      switch (action.type) {
+        case FETCH_USERS_REQUEST: {
+          return {
+            loading: true,
+            users: [],
+            error: ''
+          }
         }
-        case FETCH_USERS_SUCCES :  {
-            return{
-                loading: false,
-                users : action.payload,
-                error : ''
-            }
-            
+        case FETCH_USERS_SUCCES: {
+          return {
+            loading: false,
+            users: action.payload,
+            error: ''
+          }
+
         }
-        case FETCH_USERS_FALIURE : {
-            return {
-                loading: false,
-                user : [],
-                error: action.payload
-            }
+        case FETCH_USERS_FALIURE: {
+          return {
+            loading: false,
+            user: [],
+            error: action.payload
+          }
         }
         default: return state;
+      }
     }
-}
-    
-        // ASYNC
-    function fetchUsers(){
-    return function(dispatch){
+
+    // ASYNC
+    function fetchUsers() {
+      return function (dispatch) {
         dispatch(fetchUsersRequest());
         fetch('https://jsonplaceholder.typicode.com/users')
-        .then(response => response.json())
-        .then(response => {
-            const users = response.map(user => user['id','name'])
+          .then(response => response.json())
+          .then(response => {
+            const users = response.map(user => user['id', 'name'])
             dispatch(fetchUsersSucces(users))
-        }).catch(error => {
+          }).catch(error => {
             const errorMsg = error.message;
             dispatch(fetchUsersFaliure(errorMsg))
-        })
+          })
+      }
     }
-}
-        const logMiddleware = store => next => action => {
-        console.log('Old state', store.getState(),action);
-        next(action);
-        console.log("New state", store.getState(),action);
-}
 
-    
 
-        // STORE 
-        const store = Redux.createStore(reducer,applyMiddleware(ReduxThunk, logMiddleware))
-        store.subscribe(() => {
-            container.innerHTML = `${store.getState().users.map( (e) => e)}`;
-          
-        // console.log(store.getState());
-})
-       
-        button.addEventListener('click', () => {
-        store.dispatch(fetchUsers());
+
+    const logMiddleware = store => next => action => {
+      console.log('Old state', store.getState(), action);
+      next(action);
+      console.log("New state", store.getState(), action);
+    }
+
+
+
+    // STORE 
+    const store = Redux.createStore(reducer, applyMiddleware(ReduxThunk, logMiddleware))
+    store.subscribe(() => {
+      container.innerHTML = `${store.getState().users.map((e) => e)}`;
+
+      // console.log(store.getState());
     })
-   
 
-    
+    button.addEventListener('click', () => {
+      store.dispatch(fetchUsers());
+    })
 
-    </script>
+
+
+
+  </script>
 </body>
 
 </html>
