@@ -11,16 +11,14 @@
 </head>
 
 <body>
-  <div id="container">
-
-
-  </div>
   <button id="fetch">Fetch Users</button>
+  <div id="container"></div>
 
   <script>
     const container = document.getElementById('container');
     const button = document.getElementById('fetch');
     const applyMiddleware = Redux.applyMiddleware;
+    
     //initial state
     const intitialState = {
       loading: false,
@@ -111,7 +109,7 @@
     const store = Redux.createStore(reducer, applyMiddleware(ReduxThunk, logMiddleware))
     
     store.subscribe(() => {
-      container.innerHTML =`${store.getState().users.map((e) => e)}`;
+      container.innerHTML =`<ul>${store.getState().users.map(e => `<li>${e}</li>`).join('')}</ul>`;
 
       // console.log(store.getState());
     })
@@ -127,3 +125,5 @@
 </body>
 
 </html>
+
+({getState, dispatch}) =>
