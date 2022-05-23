@@ -84,7 +84,7 @@
     // ASYNC
     function fetchUsers() {
       return function (dispatch) {
-        dispatch(fetchUsersRequest());
+       dispatch(fetchUsersRequest());
         fetch('https://jsonplaceholder.typicode.com/users')
           .then(response => response.json())
           .then(response => {
@@ -109,8 +109,9 @@
 
     // STORE 
     const store = Redux.createStore(reducer, applyMiddleware(ReduxThunk, logMiddleware))
+    
     store.subscribe(() => {
-      container.innerHTML = `${store.getState().users.map((e) => e)}`;
+      container.innerHTML =`${store.getState().users.map((e) => e)}`;
 
       // console.log(store.getState());
     })
